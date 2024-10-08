@@ -46,10 +46,10 @@ md"""
 begin
   const safety_margin = 10
   const H = 1200
-  const Tₛ = 0.02
+  const Tₛ = 0.01
   const γ = 0.99
   const α = 0.5
-  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0)
+  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0.014)
 end
 
 # ╔═╡ fac6522b-c189-4b7c-be35-11d038a854bc

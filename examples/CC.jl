@@ -49,7 +49,7 @@ begin
   const Tₛ = 0.02
   const γ = 0.99
   const α = 0.5
-  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0)
+  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0.009)
 end
 
 # ╔═╡ fac6522b-c189-4b7c-be35-11d038a854bc
@@ -80,7 +80,7 @@ end
 
 # ╔═╡ 2d1d69f5-aed9-4f99-a63a-2f94347c7e15
 begin
-  sys_discrete = c2d(benchmarks[:F1], Tₛ)
+  sys_discrete = c2d(benchmarks[:CC], Tₛ)
   env = Environment(sys_discrete)
 
  #  dₜ_optimal = 0
