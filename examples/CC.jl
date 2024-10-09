@@ -44,8 +44,8 @@ md"""
 
 # ╔═╡ e8996f64-b030-4624-9e34-d452e5d2d5db
 begin
-  const safety_margin = 10
-  const H = 1200
+  const safety_margin = 1
+  const H = 500
   const Tₛ = 0.02
   const γ = 0.99
   const α = 0.5
