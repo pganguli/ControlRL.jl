@@ -49,7 +49,7 @@ begin
   const Tₛ = 0.02
   const γ = 0.99
   const α = 0.5
-  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0.009)
+  @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0.357)
 end
 
 # ╔═╡ fac6522b-c189-4b7c-be35-11d038a854bc
@@ -66,7 +66,9 @@ md"""
 # ╔═╡ 5402045e-83ef-4b90-9f14-1796fdadacc0
 function plotH(states::Matrix{Float64})
   # Transposing `states` because plot uses the first dimension as indices.
-  plot(0:size(states, 2)-1, states')
+  # plot(0:size(states, 2)-1, states')
+  plot(0:size(states, 2)-1, states', xlabel="Iteration", ylabel="System Dynamics", xguidefontsize=22, yguidefontsize=22, legendfontsize=12, legend=:bottomright, xtickfontsize=14, ytickfontsize=14)
+  savefig("figure.svg")
 end
 
 # ╔═╡ c34375b4-70ab-4468-9186-c43948f22a7a
@@ -102,6 +104,9 @@ end
 # ╔═╡ d58e85a8-513f-45e2-906c-41d3bdea7bb5
 sum(actions)
 
+# ╔═╡ 036b19be-0900-43cf-b8b9-e746ed1a8c0d
+actions
+
 # ╔═╡ 19634c38-ec2c-45a0-862a-3f92beecb5a1
 plotH(ideal_states)
 
@@ -126,6 +131,7 @@ plotH(discounted_rewards)
 # ╠═2d1d69f5-aed9-4f99-a63a-2f94347c7e15
 # ╠═4798f6c2-ce68-4818-8a84-75323bdd8306
 # ╠═d58e85a8-513f-45e2-906c-41d3bdea7bb5
+# ╠═036b19be-0900-43cf-b8b9-e746ed1a8c0d
 # ╠═19634c38-ec2c-45a0-862a-3f92beecb5a1
 # ╠═66fbe369-33e7-409f-ae66-29c1984518b3
 # ╠═7c54f79a-6bb4-4190-ab13-bca71bb868a8
