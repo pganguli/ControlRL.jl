@@ -123,7 +123,7 @@ function π(actions::Vector{Bool}, states::Vector{Vector{Float64}}, distances::V
         return true
     end
 	
-    μ, σ = 0.0, 1.0
+  μ, σ = 0.0, 1.0
 	dist = Normal(μ, σ)
     x = distances[end]/ dₜ * safety_margin
 	p = cdf(dist, x)
