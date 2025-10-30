@@ -1,17 +1,19 @@
 ### A Pluto.jl notebook ###
-# v0.19.46
+# v0.20.20
 
 using Markdown
 using InteractiveUtils
 
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
-    quote
+    #! format: off
+    return quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+    #! format: on
 end
 
 # ╔═╡ 04f3e318-6489-11ef-1ccc-89d0ed2d1029
@@ -24,6 +26,7 @@ begin
   using LinearAlgebra
   using PlutoUI
   using Plots
+  using Distributions
   plotlyjs()
 
   push!(LOAD_PATH, "$(@__DIR__)/../src")
@@ -51,9 +54,6 @@ begin
   const α = 0.5
   @bind dₜ_optimal Slider(0:0.001:1, show_value=true, default=0)
 end
-
-# ╔═╡ fac6522b-c189-4b7c-be35-11d038a854bc
-π(actions::Vector{Bool}, states::Vector{Vector{Float64}}, distances::Vector{Float64}, dₜ::Float64) = (length(actions) == 0) || (distances[end] > dₜ * safety_margin)
 
 # ╔═╡ 4798f6c2-ce68-4818-8a84-75323bdd8306
 dₜ_optimal
@@ -117,11 +117,34 @@ plotH(utilizations)
 # ╔═╡ 2d1ae051-9ea6-4525-9a53-769c9849915f
 plotH(discounted_rewards)
 
+# ╔═╡ fac6522b-c189-4b7c-be35-11d038a854bc
+function π(actions::Vector{Bool}, states::Vector{Vector{Float64}}, distances::Vector{Float64}, dₜ::Float64)
+	if distances[end] > safety_margin
+        return true
+    end
+	
+    μ, σ = 0.0, 1.0
+	dist = Normal(μ, σ)
+    x = distances[end]/ dₜ * safety_margin
+	p = cdf(dist, x)
+	action = rand() < p ? 1 : 0
+
+    return action
+end
+
+# ╔═╡ 97adecde-437d-4c9f-ad12-89f9f1ecd800
+# ╠═╡ disabled = true
+#=╠═╡
+π(actions::Vector{Bool}, states::Vector{Vector{Float64}}, distances::Vector{Float64}, dₜ::Float64) = (length(actions) == 0) || (distances[end] > dₜ * safety_margin)
+
+  ╠═╡ =#
+
 # ╔═╡ Cell order:
 # ╟─abb82687-12f0-4754-b3dd-49c03f3c9ad1
 # ╠═04f3e318-6489-11ef-1ccc-89d0ed2d1029
 # ╟─5ff9a070-12a3-45fd-a1b4-b619998e468a
 # ╠═fac6522b-c189-4b7c-be35-11d038a854bc
+# ╠═97adecde-437d-4c9f-ad12-89f9f1ecd800
 # ╠═e8996f64-b030-4624-9e34-d452e5d2d5db
 # ╠═2d1d69f5-aed9-4f99-a63a-2f94347c7e15
 # ╠═4798f6c2-ce68-4818-8a84-75323bdd8306
