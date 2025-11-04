@@ -58,6 +58,34 @@ function sim!(env::Environment, π::Function, dₜ::Float64, H::Integer)
 end
 
 """
+    sim!(env, π, H)
+
+Simulate the environment for `H` steps using policy `π`.
+Returns vectors containing the actions, states, distances, and ideal states, respectively.
+"""
+function sim!(env::Environment, π::Function, β::Float64, κ::Float64, H::Integer)
+  actions = Vector{Bool}(undef, H)
+  states = Vector{Vector{Float64}}(undef, H + 1)
+  utilizations = Vector{Float64}(undef, H + 1)
+  distances = Vector{Float64}(undef, H + 1)
+  ideal_states = Vector{Vector{Float64}}(undef, H + 1)
+
+  states[1] = env.state
+  utilizations[1] = 1.0
+  distances[1] = d_ideal(env)
+  ideal_states[1] = env.ideal_state
+
+  for t in 1:H
+    actions[t] = π(actions[1:t-1], states[1:t], distances[1:t], β, κ)
+    utilizations[t+1] = sum(actions[1:t]) / length(actions[1:t])
+    states[t+1], distances[t+1] = step!(env, actions[t])
+    ideal_states[t+1] = env.ideal_state
+  end
+
+  return actions, stack(states), distances, utilizations, stack(ideal_states)
+end
+
+"""
     d_ideal(env)
 
 Calculate the distance from ideal behavior for the given environment at the current step.
